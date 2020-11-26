@@ -3,9 +3,17 @@ package rzeznik.grzegorz.exotic_farm.farm;
 import rzeznik.grzegorz.exotic_farm.animal.Animal;
 import rzeznik.grzegorz.exotic_farm.user.User;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
 public class Farm {
-    private List<User> users;
-    private List<Animal> animals;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
+    @ManyToMany
+    private Set<User> users;
+    @OneToMany
+    private Set<Animal> animals;
 }

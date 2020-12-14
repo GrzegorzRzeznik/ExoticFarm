@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Farms</title>
+    <!-- 2 load the theme CSS file -->
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:replace="/fragments/header :: headerFragment">
+</div>
+<!--<div th:replace="fragments/header :: header"/>-->
+<form action="/farms">
+    <input type="text" name="searchText" th:value="${searchText}">
+    <button value="search">search</button>
+</form>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    <tr th:each="f : ${farms}">
+        <td th:text="${f.id}">ID</td>
+        <td th:text="${f.name}">Name</td>
+        <td><a th:href="@{/farms/{id}(id=${f.id})}">Edit Farm</a></td>
+    </tr>
+</table>
+<div id="container"></div>
+<hr>
+<form action="/addFarm" method="post">
+    <input name="farmName" placeholder="Farm name"><br>
+    <button>Add farm</button>
+</form>
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script type="text/javascript"
+        src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div th:replace="fragments/footer :: footer"></div>
+<footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script type="text/javascript"
+            src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</footer>
+</body>
+</html>

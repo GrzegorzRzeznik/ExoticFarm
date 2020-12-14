@@ -10,6 +10,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public void registerUser(UserRegistrationDTO dto) {
         userRepository.findByEMail(dto.getEmail())
@@ -18,7 +20,7 @@ public class UserService {
                 });
         final String passwordHash = passwordEncoder.encode(dto.getPassword());
         final User user = User.applyDTO(dto, passwordHash);
-        //user.addRole(roleRepository.findByRoleName(Role.USER));
+        user.addRole(roleRepository.findByRoleName(Role.USER));
         userRepository.save(user);
     }
 }

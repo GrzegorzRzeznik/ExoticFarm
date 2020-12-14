@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Edit Farm</title>
+    <!-- 2 load the theme CSS file -->
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:replace="/fragments/header :: headerFragment">
+</div>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Acquisition Date</th>
+        <th>Sex</th>
+<!--        <th>Actions</th>-->
+    </tr>
+    <tr th:each="a: ${animalList}">
+        <td th:text="${a.id}">ID</td>
+        <td th:text="${a.acquisitionDate}">Acquisition Date</td>
+        <td th:text="${a.name}">Name</td>
+        <td th:text="${a.sex}">Sex</td>
+        <!--        <td th:text="${a.status}">Status</td>-->
+    </tr>
+</table>
+<hr>
+<form action="/addSpider" method="post">
+    <input name="spiderName" placeholder="Spider name"><br>
+    <button>Add farm</button>
+</form>
+
+</body>
+</html>

@@ -12,23 +12,89 @@
 <table border="1">
     <tr>
         <th>ID</th>
+        <th>Status</th>
         <th>Name</th>
+        <th>Genus</th>
+        <th>Species</th>
         <th>Acquisition Date</th>
         <th>Sex</th>
+        <th>Temperament</th>
+        <th>Venom potency</th>
+        <th>Type</th>
 <!--        <th>Actions</th>-->
     </tr>
-    <tr th:each="a: ${animalList}">
-        <td th:text="${a.id}">ID</td>
-        <td th:text="${a.acquisitionDate}">Acquisition Date</td>
-        <td th:text="${a.name}">Name</td>
-        <td th:text="${a.sex}">Sex</td>
+    <tr th:each="s: ${spiderList}">
+        <td th:text="${s.id}">ID</td>
+        <td th:text="${s.status}">Status</td>
+        <td th:text="${s.name}">Name</td>
+        <td th:text="${s.infoDTO.genus}">Genus</td>
+        <td th:text="${s.infoDTO.species}">Species</td>
+        <td th:text="${s.acquisitionDate}">Acquisition Date</td>
+        <td th:text="${s.sex}">Sex</td>
+        <td th:text="${s.temperament}">Temperament</td>
+        <td th:text="${s.venomPotency}">Venom potency</td>
+        <td th:text="${s.type}">Type</td>
         <!--        <td th:text="${a.status}">Status</td>-->
     </tr>
 </table>
 <hr>
-<form action="/addSpider" method="post">
-    <input name="spiderName" placeholder="Spider name"><br>
-    <button>Add farm</button>
+<form class="form-signin" action="/spiders" method="post">
+    <select name="status">
+        <option th:value="''"
+                th:text="'Choose status'">
+
+        </option>
+        <option th:each="s : ${statusList}"
+                th:value="${s}"
+                th:text="${s.name()}">
+        </option>
+    </select><br>
+    <input name="name" placeholder="Name"><br>
+    <input name="genus" placeholder="Genus"><br>
+    <input name="species" placeholder="Species"><br>
+    <input type="date" name="acquisitionDate" placeholder="Acquisition date"><br>
+    <select name="sex">
+        <option th:value="''"
+                th:text="'Choose sex'">
+
+        </option>
+        <option th:each="s : ${sexList}"
+                th:value="${s}"
+                th:text="${s.name()}">
+        </option>
+    </select><br>
+    <select name="temperament">
+        <option th:value="''"
+                th:text="'Choose temperament'">
+
+        </option>
+        <option th:each="t : ${temperamentList}"
+                th:value="${t}"
+                th:text="${t.name()}">
+        </option>
+    </select><br>
+    <input type=hidden name="farmID" th:value="${farm.getId()}">
+    <select name="venomPotency">
+        <option th:value="''"
+                th:text="'Choose venom potency'">
+
+        </option>
+        <option th:each="v : ${venomPotencyList}"
+                th:value="${v}"
+                th:text="${v.name()}">
+        </option>
+    </select><br>
+    <select name="type">
+        <option th:value="''"
+                th:text="'Choose type'">
+
+        </option>
+        <option th:each="s : ${typeList}"
+                th:value="${s}"
+                th:text="${s.name()}">
+        </option>
+    </select><br>
+    <button>Add Spider</button>
 </form>
 
 </body>

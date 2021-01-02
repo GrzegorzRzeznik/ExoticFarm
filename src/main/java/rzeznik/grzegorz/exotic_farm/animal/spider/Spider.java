@@ -5,6 +5,7 @@ import lombok.Setter;
 import rzeznik.grzegorz.exotic_farm.animal.Animal;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
+import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfo;
 import rzeznik.grzegorz.exotic_farm.farm.Farm;
 
 import javax.persistence.*;
@@ -17,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Spider extends Animal {
 
-    @ManyToOne
-    private SpiderSpeciesInfo spiderSpeciesInfo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SpiderSpeciesInfo speciesInfo;
     @Enumerated(EnumType.STRING)
     private VenomPotency venomPotency;
     @OneToMany(mappedBy = "spider")
@@ -33,24 +34,21 @@ public class Spider extends Animal {
         this.status = status;
     }
 
-    public Spider(LocalDate date,
-                  String name,
+    public Spider(String name,
+                  LocalDate date,
                   Sex sex,
                   Status status,
                   Temperament temperament,
+                  SpiderSpeciesInfo speciesInfo,
                   Farm farm,
                   VenomPotency venomPotency,
-                  Type type,
-                  SpiderSpeciesInfo speciesInfo) {
-        this.acquisitionDate = date;
-        this.name = name;
-        this.farm = farm;
-        this.sex = sex;
-        this.status = status;
-        this.temperament = temperament;
+                  Type type
+                  ) {
+        super(date, name, farm, sex, status, temperament);
+        this.speciesInfo = speciesInfo;
         this.venomPotency = venomPotency;
         this.type = type;
-        this.spiderSpeciesInfo = speciesInfo;
+        setFarm(farm);
     }
 
     public void addMolt(Molt molt) {
@@ -58,6 +56,20 @@ public class Spider extends Animal {
     }
 
     public SpiderDTO toDTO(){
-        return new SpiderDTO(id, acquisitionDate, name, sex);
+        return new SpiderDTO(id, acquisitionDate, name, farm.toDTO(), sex, status, temperament, speciesInfo.toDTO(), venomPotency, type);
     }
+
+    public static Spider applyDTO(SpiderDTO dto){
+        return new Spider(dto.getName(),
+                dto.getAcquisitionDate(),
+                dto.getSex(),
+                dto.getStatus(),
+                dto.getTemperament(),
+                SpiderSpeciesInfo.applyDTO(dto.getInfoDTO()),
+                Farm.applyDTO(dto.getFarmDTO()),
+                dto.getVenomPotency(),
+                dto.getType());
+    }
+
+
 }

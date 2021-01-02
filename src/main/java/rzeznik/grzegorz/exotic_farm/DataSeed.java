@@ -4,10 +4,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rzeznik.grzegorz.exotic_farm.animal.Country;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
 import rzeznik.grzegorz.exotic_farm.animal.spider.*;
+import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpeciesInfoDAO;
+import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpeciesInfoFromFileDTO;
+import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfo;
+import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoRepository;
 import rzeznik.grzegorz.exotic_farm.care.CareRepository;
 import rzeznik.grzegorz.exotic_farm.farm.Farm;
 import rzeznik.grzegorz.exotic_farm.farm.FarmRepository;
@@ -18,6 +21,7 @@ import rzeznik.grzegorz.exotic_farm.user.UserRepository;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,6 +45,8 @@ public class DataSeed implements InitializingBean {
     @Autowired
     private MoltRepository moltRepository;
 
+    private final SpeciesInfoDAO speciesInfoDAO = SpeciesInfoDAO.getInstance();
+
     @Override
     public void afterPropertiesSet(){
         if (roleRepository.count() == 0) {
@@ -49,6 +55,7 @@ public class DataSeed implements InitializingBean {
         }
         addUsers();
         addFarms();
+        addSpiderInfo();
         addSpiders();
     }
 
@@ -82,7 +89,7 @@ public class DataSeed implements InitializingBean {
         User user = userRepository.findByEMail("a@a.pl").orElse(null);
         Set<User> admins = new HashSet<>();
         admins.add(user);
-        Farm farm = new Farm("AutoAddedFarm", admins);
+        Farm farm = new Farm("AutoAddedFarm", new HashSet<>(), admins);
         farmRepository.save(farm);
     }
 
@@ -91,12 +98,15 @@ public class DataSeed implements InitializingBean {
             return;
         }
         Farm farm = farmRepository.findByName("AutoAddedFarm").orElse(null);
-        SpiderSpeciesInfo speciesInfo = new SpiderSpeciesInfo("Brachypelma", "albopilosum", "Curly Hair", "28", "75", true, Country.MEXICO);
-        spiderSpeciesInfoRepository.save(speciesInfo);
+        SpiderSpeciesInfo speciesInfo = spiderSpeciesInfoRepository.findByGenusAndSpecies("Brachypelma", "Hamorii").orElse(null);
 
-        Spider spider1 = new Spider(LocalDate.now(), "Kędzior", Sex.FEMALE,Status.OWNED,Temperament.DOCILE, farm, VenomPotency.LOW, Type.TERRESTRIAL, speciesInfo);
-        Spider spider2 = new Spider(LocalDate.now(), "Gienka", Sex.FEMALE,Status.OWNED,Temperament.DOCILE, farm, VenomPotency.LOW, Type.TERRESTRIAL, speciesInfo);
-        Spider spider3 = new Spider(LocalDate.now(), "Laska", Sex.FEMALE,Status.OWNED,Temperament.DOCILE, farm, VenomPotency.LOW, Type.TERRESTRIAL, speciesInfo);
+        Spider spider1 = new Spider( "Kędzior", LocalDate.now(),Sex.FEMALE,Status.OWNED,Temperament.DOCILE, speciesInfo, farm, VenomPotency.LOW, Type.TERRESTRIAL);
+        Spider spider2 = new Spider("Gienka", LocalDate.now(), Sex.FEMALE,Status.OWNED,Temperament.DOCILE,  speciesInfo, farm, VenomPotency.LOW, Type.TERRESTRIAL);
+        Spider spider3 = new Spider("Laska", LocalDate.now(), Sex.FEMALE,Status.OWNED,Temperament.DOCILE, speciesInfo, farm, VenomPotency.LOW, Type.TERRESTRIAL);
+
+        spider1.setFarm(farm);
+        spider2.setFarm(farm);
+        spider3.setFarm(farm);
 
         spiderRepository.save(spider1);
         spiderRepository.save(spider2);
@@ -104,6 +114,15 @@ public class DataSeed implements InitializingBean {
 
     }
 
+    public void addSpiderInfo(){
+        if(spiderSpeciesInfoRepository.count() !=0){
+            return;
+        }
+        final List<SpeciesInfoFromFileDTO> speciesInfoList = speciesInfoDAO.getSpeciesInfoList();
+        for (SpeciesInfoFromFileDTO info: speciesInfoList) {
+            spiderSpeciesInfoRepository.save(SpiderSpeciesInfo.applyDTO(info));
+        }
+    }
 
 }
 

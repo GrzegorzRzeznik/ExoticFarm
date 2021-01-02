@@ -1,4 +1,4 @@
-package rzeznik.grzegorz.exotic_farm.animal.spider;
+package rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

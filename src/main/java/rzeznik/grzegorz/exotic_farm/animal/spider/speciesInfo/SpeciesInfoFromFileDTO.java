@@ -1,14 +1,16 @@
-package rzeznik.grzegorz.exotic_farm.animal.spider;
+package rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo;
 
+import lombok.Getter;
 import rzeznik.grzegorz.exotic_farm.animal.Country;
 
+@Getter
 public class SpeciesInfoFromFileDTO {
     private String genus;
     private String species;
     private String commonName;
     private String preferredTemperature;
     private String preferredHumidity;
-    private boolean hasUrticatingHair;
+    private boolean urticatingHairPresent;
     private Country country;
 
     public SpeciesInfoFromFileDTO(String genus,
@@ -16,14 +18,14 @@ public class SpeciesInfoFromFileDTO {
                                   String commonName,
                                   String  preferredTemperature,
                                   String preferredHumidity,
-                                  boolean hasUrticatingHair,
+                                  boolean urticatingHairPresent,
                                   Country country) {
         this.genus = genus;
         this.species = species;
         this.commonName = commonName;
         this.preferredTemperature = preferredTemperature;
         this.preferredHumidity = preferredHumidity;
-        this.hasUrticatingHair = hasUrticatingHair;
+        this.urticatingHairPresent = urticatingHairPresent;
         this.country = country;
     }
 
@@ -47,7 +49,7 @@ public class SpeciesInfoFromFileDTO {
                 ", commonName='" + commonName + '\'' +
                 ", preferredTemperature=" + preferredTemperature +
                 ", preferredHumidity=" + preferredHumidity +
-                ", hasUrticatingHair=" + hasUrticatingHair +
+                ", urticatingHairPresent=" + urticatingHairPresent +
                 ", country=" + country +
                 '}';
     }

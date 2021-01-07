@@ -21,6 +21,7 @@ public class User {
     private String passwordHash;
     private String firstName;
     private String lastName;
+    private String city;
     @OneToMany(mappedBy = "user")
     private List<Care> careList;
     @ManyToMany
@@ -28,12 +29,13 @@ public class User {
     private List<Role> roles;
 
 
-    public User(String username, String email, String passwordHash, String firstName, String lastName){
+    public User(String username, String email, String passwordHash, String firstName, String lastName, String city){
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.city = city;
     }
 
     public static User applyDTO(UserRegistrationDTO dto, String passwordHash) {
@@ -43,6 +45,7 @@ public class User {
         user.passwordHash = passwordHash;
         user.firstName = dto.getFirstName();
         user.lastName = dto.getLastName();
+        user.city = dto.getCity();
 
         return user;
     }
@@ -53,7 +56,7 @@ public class User {
         user.passwordHash = passwordHash;
         user.firstName = dto.getFirstName();
         user.lastName = dto.getLastName();
-
+        user.city = dto.getCity();
         return user;
     }
 
@@ -67,6 +70,6 @@ public class User {
     }
 
     public UserDTO toDTO(){
-        return new UserDTO(id, username, email, passwordHash, firstName, lastName);
+        return new UserDTO(id, username, email, passwordHash, firstName, lastName, city);
     }
 }

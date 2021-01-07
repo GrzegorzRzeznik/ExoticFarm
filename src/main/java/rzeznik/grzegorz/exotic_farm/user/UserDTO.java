@@ -13,6 +13,7 @@ public class UserDTO {
     private String passwordHash;
     private String firstName;
     private String lastName;
+    private String city;
 
     
 }

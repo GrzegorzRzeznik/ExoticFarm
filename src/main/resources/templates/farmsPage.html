@@ -3,13 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Farms</title>
-    <!-- 2 load the theme CSS file -->
     <div th:replace="fragments/header :: header-css"/>
 </head>
 <body>
 <div th:replace="/fragments/header :: headerFragment">
 </div>
-<!--<div th:replace="fragments/header :: header"/>-->
 <form action="/farms">
     <input type="text" name="searchText" th:value="${searchText}">
     <button value="search">search</button>
@@ -31,7 +29,6 @@
     <input name="farmName" placeholder="Farm name"><br>
     <button>Add farm</button>
 </form>
-<!--<div th:replace="fragments/footer :: footer"></div>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 <script type="text/javascript"

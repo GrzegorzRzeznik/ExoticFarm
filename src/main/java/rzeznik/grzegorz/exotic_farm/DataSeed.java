@@ -70,14 +70,16 @@ public class DataSeed implements InitializingBean {
                 "a@a.pl",
                 passwordEncoder.encode("admin"),
                 "Aaa",
-                "Aaa" );
+                "Aaa",
+                "Szczecin");
         admin1.addRole(admin);
         userRepository.save(admin1);
         User user1 = new User("user",
                 "u@u.pl",
                 passwordEncoder.encode("user"),
                 "Uuu",
-                "Uuu");
+                "Uuu",
+                "Warszawa");
         user1.addRole(user);
         userRepository.save(user1);
     }

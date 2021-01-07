@@ -1,7 +1,6 @@
 package rzeznik.grzegorz.exotic_farm.user;
 
 import lombok.Data;
-import rzeznik.grzegorz.exotic_farm.farm.Farm;
 import rzeznik.grzegorz.exotic_farm.farm.FarmDTO;
 
 import java.util.Set;
@@ -13,6 +12,7 @@ public class UserRegistrationDTO {
     private String password;
     private String firstName;
     private String lastName;
+    private String city;
     private Set<FarmDTO> farms;
 
 

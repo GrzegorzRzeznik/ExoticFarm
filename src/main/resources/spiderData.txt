@@ -1,4 +1,4 @@
-Acanthoscuria
+Acanthoscurria
     geniculata,Brasilian White Knee Taranula,24-28,70-80,true,BRAZIL
 Brachypelma
     albiceps,Mexican Golden Red Rump,22-27,60-70,true,MEXICO

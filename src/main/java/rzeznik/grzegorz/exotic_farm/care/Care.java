@@ -1,26 +1,30 @@
 package rzeznik.grzegorz.exotic_farm.care;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rzeznik.grzegorz.exotic_farm.animal.Animal;
 import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
+import rzeznik.grzegorz.exotic_farm.animal.spider.Spider;
+import rzeznik.grzegorz.exotic_farm.animal.spider.SpiderDTO;
 import rzeznik.grzegorz.exotic_farm.user.User;
 import rzeznik.grzegorz.exotic_farm.user.UserDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Setter
+@Getter
 @NoArgsConstructor
 public class Care {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Animal animal;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
@@ -33,16 +37,42 @@ public class Care {
         this.type = type;
     }
 
+    public Care(Integer id, User user, LocalDate date, CareType type) {
+        this.id = id;
+        this.user = user;
+        this.date = date;
+        this.type = type;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAnimal(Animal animal) {
+       this.animal = animal;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setType(CareType type) {
+        this.type = type;
+    }
+
     public CareDTO toDTO(){
         UserDTO userDTO = user.toDTO();
-        AnimalDTO animalDTO = animal.toDTO();
-        return new CareDTO(id, userDTO, animalDTO, type);
+        return new CareDTO(id, userDTO, date, type);
     }
 
     public static Care applyDTO(CareDTO careDTO){
-        return new Care(User.applyDTO(careDTO.getUser(), careDTO.getUser().getPasswordHash()),
-                Animal.applyDTO(careDTO.getAnimal()),
-                careDTO.getAnimal().getAcquisitionDate(),
+        return new Care(careDTO.getId(), User.applyDTO(careDTO.getUserDTO(),careDTO.getUserDTO().getPasswordHash()),
+                careDTO.getDate(),
                 careDTO.getType());
     }
+
 }

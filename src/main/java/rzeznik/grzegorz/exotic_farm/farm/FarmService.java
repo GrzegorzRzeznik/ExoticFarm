@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 @Service
 public class FarmService {
 
-    @Autowired
-    private FarmRepository farmRepository;
+    private final FarmRepository farmRepository;
+
+    public FarmService(FarmRepository farmRepository) {
+        this.farmRepository = farmRepository;
+    }
 
     public void addFarm(FarmDTO farmDTO){
         Farm farm = Farm.applyDTO(farmDTO);
@@ -19,13 +22,13 @@ public class FarmService {
 
     public List<FarmDTO> findAll(){
         return farmRepository.findAll().stream()
-                .map(f -> f.toDTO())
+                .map(Farm::toDTO)
                 .collect(Collectors.toList());
     }
 
     public FarmDTO findById(Integer id){
         return farmRepository.findById(id)
-                .map(f -> f.toDTO())
+                .map(Farm::toDTO)
                 .orElseThrow(() -> new FarmNotFoundException(id));
     }
 

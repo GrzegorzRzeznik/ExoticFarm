@@ -2,11 +2,14 @@ package rzeznik.grzegorz.exotic_farm.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import rzeznik.grzegorz.exotic_farm.care.Care;
+import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -22,19 +25,45 @@ public class User {
     private String firstName;
     private String lastName;
     private String city;
-    @OneToMany(mappedBy = "user")
-    private List<Care> careList;
     @ManyToMany
     @JoinTable(name = "Users_roles")
     private List<Role> roles;
 
 
-    public User(String username, String email, String passwordHash, String firstName, String lastName, String city){
+    public User(String username, String email, String passwordHash, String firstName, String lastName, String city) {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.city = city;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -49,8 +78,10 @@ public class User {
 
         return user;
     }
+
     public static User applyDTO(UserDTO dto, String passwordHash) {
         User user = new User();
+        user.id = dto.getId();
         user.username = dto.getUsername();
         user.email = dto.getEmail();
         user.passwordHash = passwordHash;
@@ -69,7 +100,7 @@ public class User {
         }
     }
 
-    public UserDTO toDTO(){
+    public UserDTO toDTO() {
         return new UserDTO(id, username, email, passwordHash, firstName, lastName, city);
     }
 }

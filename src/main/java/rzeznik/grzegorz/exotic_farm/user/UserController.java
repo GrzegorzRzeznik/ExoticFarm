@@ -1,6 +1,5 @@
 package rzeznik.grzegorz.exotic_farm.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +10,13 @@ import java.util.Map;
 @Controller
 public class UserController {
 
-    @Autowired
     UserService userService;
-    @Autowired
-    private UserRegistrationValidationService validationService;
+    private final UserRegistrationValidationService validationService;
+
+    public UserController(UserService userService, UserRegistrationValidationService validationService) {
+        this.userService = userService;
+        this.validationService = validationService;
+    }
 
     @GetMapping("/registration")
     public String registrationFrom(Model model) {

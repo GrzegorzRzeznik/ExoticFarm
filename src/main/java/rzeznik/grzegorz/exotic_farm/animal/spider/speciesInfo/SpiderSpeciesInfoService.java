@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 @Service
 public class SpiderSpeciesInfoService {
 
-    @Autowired
-    private SpiderSpeciesInfoRepository spiderSpeciesInfoRepository;
+    private final SpiderSpeciesInfoRepository spiderSpeciesInfoRepository;
+
+    public SpiderSpeciesInfoService(SpiderSpeciesInfoRepository spiderSpeciesInfoRepository) {
+        this.spiderSpeciesInfoRepository = spiderSpeciesInfoRepository;
+    }
 
     public List<SpiderSpeciesInfoDTO> findAll(){
         return spiderSpeciesInfoRepository.findAll().stream()

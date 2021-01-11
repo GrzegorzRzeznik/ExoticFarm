@@ -1,15 +1,20 @@
 package rzeznik.grzegorz.exotic_farm.care;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CareService {
 
-    @Autowired
-    private CareRepository careRepository;
+    private final CareRepository careRepository;
 
-    public void addCare(CareDTO careDTO){
-        careRepository.save(Care.applyDTO(careDTO));
+    public CareService(CareRepository careRepository) {
+        this.careRepository = careRepository;
+    }
+
+    public List<CareDTO> findAllByAnimalId(Integer animalId){
+       return careRepository.findAllByAnimalId(animalId).stream().map(Care::toDTO).collect(Collectors.toList());
     }
 }

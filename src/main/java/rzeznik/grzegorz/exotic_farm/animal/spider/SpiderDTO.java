@@ -5,9 +5,11 @@ import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoDTO;
+import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 import rzeznik.grzegorz.exotic_farm.farm.FarmDTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 public class SpiderDTO extends AnimalDTO {
@@ -31,6 +33,7 @@ public class SpiderDTO extends AnimalDTO {
         this.venomPotency = venomPotency;
         this.type = type;
     }
+
     public SpiderDTO(LocalDate acquisitionDate,
                      String name,
                      FarmDTO farmDTO,

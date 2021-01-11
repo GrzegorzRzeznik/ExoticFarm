@@ -9,6 +9,7 @@
 <body>
 <div th:replace="/fragments/header :: headerFragment">
 </div>
+<div>Spiders</div>
 <table border="1">
     <tr>
         <th>ID</th>
@@ -21,7 +22,10 @@
         <th>Temperament</th>
         <th>Venom potency</th>
         <th>Type</th>
-<!--        <th>Actions</th>-->
+        <th>Last fed</th>
+        <th>Last substrate change</th>
+        <th>Last rehouse</th>
+        <th>Actions</th>
     </tr>
     <tr th:each="s: ${spiderList}">
         <td th:text="${s.id}">ID</td>
@@ -34,7 +38,23 @@
         <td th:text="${s.temperament}">Temperament</td>
         <td th:text="${s.venomPotency}">Venom potency</td>
         <td th:text="${s.type}">Type</td>
-        <!--        <td th:text="${a.status}">Status</td>-->
+        <td th:text="${recentFeeding.get(s)}">Last fed</td>
+        <td th:text="${recentSubstrateChange.get(s)}">Last rehouse</td>
+        <td th:text="${recentRehouse.get(s)}">Last substrate change</td>
+        <td>
+            <form th:object="${farm}" th:action="@{'/farms/'+${farm.id}+'/spiders/'+${s.id} +'/care'}" method="post">
+                <input type=hidden name="careType" value="FEEDING"/>
+                <button class="btn btn-danger btn-block">Feed</button>
+            </form>
+            <form th:object="${farm}" th:action="@{'/farms/'+${farm.id}+'/spiders/'+${s.id} +'/care'}" method="post">
+                <input type=hidden name="careType" value="SUBSTRATE_CHANGE"/>
+                <button class="btn btn-primary btn-block">New substrate</button>
+            </form>
+            <form th:object="${farm}" th:action="@{'/farms/'+${farm.id}+'/spiders/'+${s.id} +'/care'}" method="post">
+                <input type=hidden name="careType" value="REHOUSE"/>
+                <button class="btn btn-success btn-block" >Rehouse</button>
+            </form>
+        </td>
     </tr>
 </table>
 <hr>

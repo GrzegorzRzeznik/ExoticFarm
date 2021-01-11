@@ -1,19 +1,21 @@
 package rzeznik.grzegorz.exotic_farm.animal.spider;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rzeznik.grzegorz.exotic_farm.animal.AnimalNotFoundException;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class SpiderService {
 
-    @Autowired
-    private SpiderRepository spiderRepository;
+    private final SpiderRepository spiderRepository;
 
-    public void addSpider(SpiderDTO spiderDTO){
+    public SpiderService(SpiderRepository spiderRepository) {
+        this.spiderRepository = spiderRepository;
+    }
+
+    public void save(SpiderDTO spiderDTO){
         spiderRepository.save(Spider.applyDTO(spiderDTO));
     }
 
@@ -24,7 +26,7 @@ public class SpiderService {
 
     }
 
-    public Set<SpiderDTO> findByFarmId(Integer id){
-        return spiderRepository.findByFarmId(id).stream().map(Spider::toDTO).collect(Collectors.toSet());
+    public List<SpiderDTO> findByFarmId(Integer id){
+        return spiderRepository.findByFarmId(id).stream().map(Spider::toDTO).collect(Collectors.toList());
     }
 }

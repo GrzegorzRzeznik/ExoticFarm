@@ -1,6 +1,5 @@
 package rzeznik.grzegorz.exotic_farm.animal.spider;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +10,14 @@ import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoDTO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoService;
+import rzeznik.grzegorz.exotic_farm.care.CareType;
 import rzeznik.grzegorz.exotic_farm.farm.FarmDTO;
 import rzeznik.grzegorz.exotic_farm.farm.FarmService;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class SpiderController {
@@ -55,5 +58,29 @@ public class SpiderController {
         spiderDTO.setInfoDTO(speciesInfo);
         spiderService.save(spiderDTO);
         return "redirect:/farms/"+farmID;
+    }
+
+    @GetMapping("farms/{farmID}/addSpider/")
+    public String addSpiderPage(@PathVariable(name ="farmID") String farmId, Model model){
+
+        final Map<String, List<String>> genusSpeciesMap = createGenusSpeciesListMap();
+
+        model.addAttribute(farmId);
+        model.addAttribute("statusList", Status.values());
+        model.addAttribute("sexList", Sex.values());
+        model.addAttribute("temperamentList", Temperament.values());
+        model.addAttribute("typeList", Type.values());
+        model.addAttribute("venomPotencyList", VenomPotency.values());
+        model.addAttribute("careType", CareType.values());
+        model.addAttribute("genusSpeciesMap", genusSpeciesMap);
+
+        return "addSpider";
+    }
+
+    private Map<String, List<String>> createGenusSpeciesListMap() {
+        Map<String, List<SpiderSpeciesInfoDTO>> genusSpeciesMap = spiderSpeciesInfoService.findAll().stream()
+                .collect(Collectors.groupingBy(SpiderSpeciesInfoDTO::getGenus));
+        return genusSpeciesMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, i->i.getValue().stream().map(SpiderSpeciesInfoDTO::getSpecies).collect(Collectors.toList())));
     }
 }

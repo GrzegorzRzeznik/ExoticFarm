@@ -8,31 +8,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
 import rzeznik.grzegorz.exotic_farm.animal.AnimalService;
-import rzeznik.grzegorz.exotic_farm.animal.Sex;
-import rzeznik.grzegorz.exotic_farm.animal.Temperament;
-import rzeznik.grzegorz.exotic_farm.animal.spider.Status;
-import rzeznik.grzegorz.exotic_farm.animal.spider.Type;
-import rzeznik.grzegorz.exotic_farm.animal.spider.VenomPotency;
-import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoDTO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoService;
 import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 import rzeznik.grzegorz.exotic_farm.care.CareType;
+import rzeznik.grzegorz.exotic_farm.user.UserContextService;
+import rzeznik.grzegorz.exotic_farm.user.UserDTO;
+import rzeznik.grzegorz.exotic_farm.user.UserService;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class FarmController {
 
     private final FarmService farmService;
-    private final SpiderSpeciesInfoService spiderSpeciesInfoService;
     private final AnimalService animalService;
 
-    public FarmController(FarmService farmService, SpiderSpeciesInfoService spiderSpeciesInfoService, AnimalService animalService) {
+    public FarmController(FarmService farmService, AnimalService animalService) {
         this.farmService = farmService;
-        this.spiderSpeciesInfoService = spiderSpeciesInfoService;
         this.animalService = animalService;
     }
 
@@ -41,12 +37,15 @@ public class FarmController {
         List<FarmDTO> farms = farmService.findAll();
         model.addAttribute("farms", farms);
         return "farmsPage";
+        //todo make user see only his farms
+
     }
 
     @PostMapping("/addFarm")
     public String addFarm(@RequestParam String farmName) {
         farmService.addFarm(new FarmDTO(farmName));
         return "redirect:/farms";
+        //todo add user to the list while creating farm
     }
 
     @GetMapping("/farms/{id}")
@@ -56,16 +55,8 @@ public class FarmController {
         Map<AnimalDTO, String> lastFeedingMap = findLastFeeding(animals);
         Map<AnimalDTO, String> lastRehouseMap = findLastRehouse(animals);
         Map<AnimalDTO, String> lastSubstrateChangeMap = findLastSubstrateChange(animals);
-        final List<SpiderSpeciesInfoDTO> spiderSpeciesInfoDTOS = spiderSpeciesInfoService.findAll();
-
         model.addAttribute("farm", farm);
-        model.addAttribute("statusList", Status.values());
-        model.addAttribute("sexList", Sex.values());
-        model.addAttribute("temperamentList", Temperament.values());
-        model.addAttribute("typeList", Type.values());
-        model.addAttribute("venomPotencyList", VenomPotency.values());
         model.addAttribute("spiderList", animals);
-        model.addAttribute("speciesInfo", spiderSpeciesInfoDTOS);
         model.addAttribute("careType", CareType.values());
         model.addAttribute("recentFeeding", lastFeedingMap);
         model.addAttribute("recentRehouse", lastRehouseMap);

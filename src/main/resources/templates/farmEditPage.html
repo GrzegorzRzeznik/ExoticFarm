@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>Edit Farm</title>
-    <!-- 2 load the theme CSS file -->
     <div th:replace="fragments/header :: header-css"/>
 </head>
 <body>
@@ -52,70 +51,15 @@
             </form>
             <form th:object="${farm}" th:action="@{'/farms/'+${farm.id}+'/spiders/'+${s.id} +'/care'}" method="post">
                 <input type=hidden name="careType" value="REHOUSE"/>
-                <button class="btn btn-success btn-block" >Rehouse</button>
+                <button class="btn btn-success btn-block">Rehouse</button>
             </form>
         </td>
     </tr>
 </table>
 <hr>
-<form class="form-signin" action="/spiders" method="post">
-    <select name="status">
-        <option th:value="''"
-                th:text="'Choose status'">
-
-        </option>
-        <option th:each="s : ${statusList}"
-                th:value="${s}"
-                th:text="${s.name()}">
-        </option>
-    </select><br>
-    <input name="name" placeholder="Name"><br>
-    <input name="genus" placeholder="Genus"><br>
-    <input name="species" placeholder="Species"><br>
-    <input type="date" name="acquisitionDate" placeholder="Acquisition date"><br>
-    <select name="sex">
-        <option th:value="''"
-                th:text="'Choose sex'">
-
-        </option>
-        <option th:each="s : ${sexList}"
-                th:value="${s}"
-                th:text="${s.name()}">
-        </option>
-    </select><br>
-    <select name="temperament">
-        <option th:value="''"
-                th:text="'Choose temperament'">
-
-        </option>
-        <option th:each="t : ${temperamentList}"
-                th:value="${t}"
-                th:text="${t.name()}">
-        </option>
-    </select><br>
-    <input type=hidden name="farmID" th:value="${farm.getId()}">
-    <select name="venomPotency">
-        <option th:value="''"
-                th:text="'Choose venom potency'">
-
-        </option>
-        <option th:each="v : ${venomPotencyList}"
-                th:value="${v}"
-                th:text="${v.name()}">
-        </option>
-    </select><br>
-    <select name="type">
-        <option th:value="''"
-                th:text="'Choose type'">
-
-        </option>
-        <option th:each="s : ${typeList}"
-                th:value="${s}"
-                th:text="${s.name()}">
-        </option>
-    </select><br>
-    <button>Add Spider</button>
+<form th:action="@{/farms/{id}/addSpider/(id=${farm.id})}" method="get">
+    <button class="btn btn-danger">Add Spider</button>
 </form>
-
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

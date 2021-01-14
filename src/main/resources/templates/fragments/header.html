@@ -6,7 +6,6 @@
         <link rel="stylesheet" th:href="@{/css/main.css}"/>
         <link rel="stylesheet" th:href="@{/css/signin.css}"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </div>
 </head>
 <body>
@@ -14,7 +13,6 @@
     <div class="topnav">
         <a href="/">Home Page</a>
         <a href="/farms">Farms</a>
-        <a href="/products">Produkty</a>
         <a th:if="!${@userContextService.userName()}" href="/registration">Register</a>
         <p th:text="${@userContextService.userName()}"></p>
     </div>

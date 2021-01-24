@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:fragment="header-css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" th:href="@{/css/main.css}"/>
         <link rel="stylesheet" th:href="@{/css/signin.css}"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -10,13 +10,28 @@
 </head>
 <body>
 <div th:fragment="headerFragment">
-    <div class="topnav">
-        <a href="/">Home Page</a>
-        <a href="/farms">Farms</a>
-        <a th:if="!${@userContextService.userName()}" href="/registration">Register</a>
-        <p th:text="${@userContextService.userName()}"></p>
-    </div>
-    <span th:if="${@userContextService.userName()}">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home Page</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/farms">Farms</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:if="!${@userContextService.userName()}" href="/registration">Register</a>
+            </li>
+            <li class="nav-item block">
+                <a class="nav-link" th:if="${@userContextService.userName()}" href="/editAccount"
+                   th:utext="${@userContextService.userName()}"></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:if="${@userContextService.userName()}" href="/logout">Logout</a>
+            </li>
+            <li>
+<span th:if="${@userContextService.userName()}">
 <div style="float: right" id="openweathermap-widget">
     <link href="//openweathermap.org/themes/openweathermap/assets/vendor/owm/css/openweathermap-widget-right.min.css"
           rel="stylesheet">
@@ -45,7 +60,11 @@
 
 <p style="float: right;color: white" id="weather"></p>
 </span>
+            </li>
+        </ul>
+    </nav>
 </div>
+
 
 </body>
 </html>

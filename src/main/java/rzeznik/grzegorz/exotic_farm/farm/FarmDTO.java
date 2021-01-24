@@ -2,12 +2,9 @@ package rzeznik.grzegorz.exotic_farm.farm;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import rzeznik.grzegorz.exotic_farm.animal.Animal;
-import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
-import rzeznik.grzegorz.exotic_farm.animal.spider.SpiderDTO;
-import rzeznik.grzegorz.exotic_farm.user.User;
 import rzeznik.grzegorz.exotic_farm.user.UserDTO;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -16,13 +13,27 @@ public class FarmDTO {
 
     private Integer id;
     private String name;
-    private Set<UserDTO> admins;
-    private Set<UserDTO> users;
+    private Set<UserDTO> users = new HashSet<>();
+    private Set<UserDTO> admins = new HashSet<>();
 
 
-    public FarmDTO(String name){
+    public FarmDTO(String name) {
         this.name = name;
     }
 
+    public void addUser(UserDTO userDTO) {
+        if(users.contains(userDTO) || admins.contains(userDTO)){
+            return;
+        }
+        users.add(userDTO);
+    }
+
+    public void addAdmin(UserDTO userDTO) {
+        if(admins.contains(userDTO)){
+            return;
+        }
+        users.remove(userDTO);
+        admins.add(userDTO);
+    }
 
 }

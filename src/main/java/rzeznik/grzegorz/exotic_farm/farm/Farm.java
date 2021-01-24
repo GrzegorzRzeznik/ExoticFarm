@@ -1,15 +1,14 @@
 package rzeznik.grzegorz.exotic_farm.farm;
 
 import lombok.AllArgsConstructor;
-import rzeznik.grzegorz.exotic_farm.animal.spider.Spider;
-import rzeznik.grzegorz.exotic_farm.animal.spider.SpiderDTO;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import rzeznik.grzegorz.exotic_farm.animal.Animal;
 import rzeznik.grzegorz.exotic_farm.user.User;
 import rzeznik.grzegorz.exotic_farm.user.UserDTO;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,14 +20,24 @@ public class Farm {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     private String name;
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "Farm_users")
     private Set<User> users = new HashSet<>();
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "Farm_admins")
     private Set<User> admins = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "farm")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Animal> animals = new HashSet<>();
 
     public Farm() {
+    }
+
+    public Farm(Integer id, String name, Set<User> users, Set<User> admins) {
+        this.id = id;
+        this.name = name;
+        this.users = users;
+        this.admins = admins;
     }
 
     public Farm(String name, Set<User> users, Set<User> admins) {
@@ -41,13 +50,13 @@ public class Farm {
         Set<User> admins = new HashSet<>();
         if (dto.getAdmins() != null) {
             admins = dto.getAdmins().stream()
-                    .map(u -> User.applyDTO(u, u.getPasswordHash()))
+                    .map(User::applyDTO)
                     .collect(Collectors.toSet());
         }
         Set<User> users = new HashSet<>();
         if (dto.getUsers() != null) {
             users = dto.getUsers().stream()
-                    .map(u -> User.applyDTO(u, u.getPasswordHash()))
+                    .map(User::applyDTO)
                     .collect(Collectors.toSet());
         }
 

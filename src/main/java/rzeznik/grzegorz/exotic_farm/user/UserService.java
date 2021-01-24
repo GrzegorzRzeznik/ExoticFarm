@@ -34,6 +34,6 @@ public class UserService {
     }
 
     public void save(UserDTO userDTO) {
-        userRepository.save(User.applyDTO(userDTO, userDTO.getPasswordHash()));
+        userRepository.save(User.applyDTO(userDTO));
     }
 }

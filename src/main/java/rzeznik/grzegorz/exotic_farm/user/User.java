@@ -2,14 +2,10 @@ package rzeznik.grzegorz.exotic_farm.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import rzeznik.grzegorz.exotic_farm.care.Care;
-import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -75,16 +71,15 @@ public class User {
         user.firstName = dto.getFirstName();
         user.lastName = dto.getLastName();
         user.city = dto.getCity();
-
         return user;
     }
 
-    public static User applyDTO(UserDTO dto, String passwordHash) {
+    public static User applyDTO(UserDTO dto) {
         User user = new User();
         user.id = dto.getId();
         user.username = dto.getUsername();
         user.email = dto.getEmail();
-        user.passwordHash = passwordHash;
+        user.passwordHash = dto.getPasswordHash();
         user.firstName = dto.getFirstName();
         user.lastName = dto.getLastName();
         user.city = dto.getCity();

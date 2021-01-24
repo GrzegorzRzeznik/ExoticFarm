@@ -2,7 +2,6 @@ package rzeznik.grzegorz.exotic_farm.animal;
 
 import lombok.Getter;
 import rzeznik.grzegorz.exotic_farm.animal.spider.Status;
-import rzeznik.grzegorz.exotic_farm.care.Care;
 import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 import rzeznik.grzegorz.exotic_farm.farm.FarmDTO;
 

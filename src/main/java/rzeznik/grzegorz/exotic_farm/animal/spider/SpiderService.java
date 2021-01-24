@@ -29,4 +29,8 @@ public class SpiderService {
     public List<SpiderDTO> findByFarmId(Integer id){
         return spiderRepository.findByFarmId(id).stream().map(Spider::toDTO).collect(Collectors.toList());
     }
+
+    public void delete(SpiderDTO spiderDTO) {
+        spiderRepository.delete(Spider.applyDTO(spiderDTO));
+    }
 }

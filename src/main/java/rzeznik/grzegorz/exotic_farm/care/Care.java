@@ -2,17 +2,12 @@ package rzeznik.grzegorz.exotic_farm.care;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import rzeznik.grzegorz.exotic_farm.animal.Animal;
-import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
-import rzeznik.grzegorz.exotic_farm.animal.spider.Spider;
-import rzeznik.grzegorz.exotic_farm.animal.spider.SpiderDTO;
 import rzeznik.grzegorz.exotic_farm.user.User;
 import rzeznik.grzegorz.exotic_farm.user.UserDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Getter
@@ -70,7 +65,7 @@ public class Care {
     }
 
     public static Care applyDTO(CareDTO careDTO){
-        return new Care(careDTO.getId(), User.applyDTO(careDTO.getUserDTO(),careDTO.getUserDTO().getPasswordHash()),
+        return new Care(careDTO.getId(), User.applyDTO(careDTO.getUserDTO()),
                 careDTO.getDate(),
                 careDTO.getType());
     }

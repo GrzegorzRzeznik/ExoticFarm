@@ -1,11 +1,11 @@
 package rzeznik.grzegorz.exotic_farm.animal;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import rzeznik.grzegorz.exotic_farm.animal.spider.Status;
 import rzeznik.grzegorz.exotic_farm.care.Care;
-import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 import rzeznik.grzegorz.exotic_farm.farm.Farm;
 
 import javax.persistence.*;
@@ -32,8 +32,8 @@ public class Animal {
     protected Status status;
     @Enumerated(EnumType.STRING)
     protected Temperament temperament;
-    @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "animal")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "animal")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     protected List<Care> careList = new ArrayList<>();
 
     public Animal(LocalDate acquisitionDate, String name, Farm farm, Sex sex, Status status, Temperament temperament) {

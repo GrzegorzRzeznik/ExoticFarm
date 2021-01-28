@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
 import rzeznik.grzegorz.exotic_farm.animal.spider.*;
+import rzeznik.grzegorz.exotic_farm.animal.spider.molt.MoltRepository;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpeciesInfoDAO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpeciesInfoFromFileDTO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfo;

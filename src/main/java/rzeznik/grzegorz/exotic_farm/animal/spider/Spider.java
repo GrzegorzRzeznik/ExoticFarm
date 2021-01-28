@@ -2,9 +2,13 @@ package rzeznik.grzegorz.exotic_farm.animal.spider;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import rzeznik.grzegorz.exotic_farm.animal.Animal;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
+import rzeznik.grzegorz.exotic_farm.animal.spider.molt.Molt;
+import rzeznik.grzegorz.exotic_farm.animal.spider.molt.MoltDTO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfo;
 import rzeznik.grzegorz.exotic_farm.care.Care;
 import rzeznik.grzegorz.exotic_farm.care.CareDTO;
@@ -25,7 +29,8 @@ public class Spider extends Animal {
     private SpiderSpeciesInfo speciesInfo;
     @Enumerated(EnumType.STRING)
     private VenomPotency venomPotency;
-    @OneToMany(mappedBy = "spider")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "spider")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Molt> molts = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -70,21 +75,28 @@ public class Spider extends Animal {
     }
 
     public void addMolt(Molt molt) {
-        this.molts.add(molt);
+        if (molts.contains(molt))
+            return;
+        molt.setSpider(this);
+        molts.add(molt);
     }
 
     public SpiderDTO toDTO() {
         SpiderDTO spiderDTO = new SpiderDTO(id, acquisitionDate, name, farm.toDTO(), sex, status, temperament, speciesInfo.toDTO(), venomPotency, type);
         List<CareDTO> careDTOList = careList.stream().map(Care::toDTO).collect(Collectors.toList());
+        List<MoltDTO> moltDTOList = molts.stream().map(Molt::toDTO).collect(Collectors.toList());
         for (CareDTO c : careDTOList) {
             spiderDTO.addCare(c);
+        }
+        for (MoltDTO m : moltDTOList){
+            spiderDTO.addMolt(m);
         }
         return spiderDTO;
     }
 
     public static Spider applyDTO(SpiderDTO dto) {
         List<Care> careList = dto.getCareDTOList().stream().map(Care::applyDTO).collect(Collectors.toList());
-
+        List<Molt> molts = dto.getMoltsDTOList().stream().map(Molt::applyDTO).collect(Collectors.toList());
         Spider spider = new Spider(dto.getId(),
                 dto.getAcquisitionDate(),
                 dto.getName(),
@@ -97,6 +109,9 @@ public class Spider extends Animal {
                 dto.getType());
         for (Care c : careList) {
             spider.addCare(c);
+        }
+        for (Molt m : molts){
+            spider.addMolt(m);
         }
         return spider;
     }

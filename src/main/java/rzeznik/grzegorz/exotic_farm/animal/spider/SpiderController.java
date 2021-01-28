@@ -35,7 +35,12 @@ public class SpiderController {
     private final CareService careService;
     private final UserContextService userContextService;
 
-    public SpiderController(SpiderService spiderService, SpiderSpeciesInfoService spiderSpeciesInfoService, FarmService farmService, UserService userService, CareService careService, UserContextService userContextService) {
+    public SpiderController(SpiderService spiderService,
+                            SpiderSpeciesInfoService spiderSpeciesInfoService,
+                            FarmService farmService,
+                            UserService userService,
+                            CareService careService,
+                            UserContextService userContextService) {
         this.spiderService = spiderService;
         this.spiderSpeciesInfoService = spiderSpeciesInfoService;
         this.farmService = farmService;
@@ -45,13 +50,15 @@ public class SpiderController {
     }
 
     @GetMapping("farms/{farmID}/spiders/{spiderID}")
-    public String editSpider(@PathVariable(name = "farmID") Integer farmID, @PathVariable(name = "spiderID") Integer spiderID, Model model){
+    public String editSpider(@PathVariable(name = "farmID") Integer farmID, @PathVariable(name = "spiderID") Integer spiderID, Model model) {
 
         List<CareDTO> feedingList = createFeedingList(spiderID);
         List<CareDTO> substrateChangeList = createSubstrateChangeList(spiderID);
         List<CareDTO> rehouseList = createRehouseList(spiderID);
+        SpiderDTO spiderDTO = spiderService.findById(spiderID);
 
         model.addAttribute("spider", spiderService.findById(spiderID));
+        model.addAttribute("moltsNumber", spiderDTO.getMoltsDTOList().size());
         model.addAttribute("feedingList", feedingList);
         model.addAttribute("substrateChangeList", substrateChangeList);
         model.addAttribute("rehouseList", rehouseList);
@@ -70,28 +77,30 @@ public class SpiderController {
                             @RequestParam String farmID,
                             @RequestParam VenomPotency venomPotency,
                             @RequestParam Type type,
-                            Model model){
+                            Model model) {
         FarmDTO farmDTO = farmService.findById(Integer.parseInt(farmID));
         model.addAttribute("farm", farmDTO);
-        SpiderSpeciesInfoDTO speciesInfo= spiderSpeciesInfoService.findByGenusAndSpecies(genus, species);
+        SpiderSpeciesInfoDTO speciesInfo = spiderSpeciesInfoService.findByGenusAndSpecies(genus, species);
         LocalDate date = LocalDate.parse(acquisitionDate);
-        SpiderDTO spiderDTO= new SpiderDTO(date, name, farmDTO, sex, status, temperament, venomPotency, type);
+        SpiderDTO spiderDTO = new SpiderDTO(date, name, farmDTO, sex, status, temperament, venomPotency, type);
         spiderDTO.setInfoDTO(speciesInfo);
         spiderService.save(spiderDTO);
-        return "redirect:/farms/"+farmID;
+        return "redirect:/farms/" + farmID;
     }
+
     @PostMapping("/farms/{farmID}/deleteSpider/")
-    public String deleteSpider(@PathVariable(name = "farmID")Integer farmID, @RequestParam(name = "spiderID") Integer spiderID){
+    public String deleteSpider(@PathVariable(name = "farmID") Integer farmID, @RequestParam(name = "spiderID") Integer spiderID) {
         FarmDTO farm = farmService.findById(farmID);
         UserDTO user = userService.findUserByUsername(userContextService.userName()).orElseThrow(UserNotFoundException::new);
-        if (farm.getAdmins().contains(user)){
+        if (farm.getAdmins().contains(user)) {
             SpiderDTO spider = spiderService.findById(spiderID);
             spiderService.delete(spider);
         }
-        return "redirect:/farms/"+farmID;
+        return "redirect:/farms/" + farmID;
     }
+
     @PostMapping("farms/{farmID}/addSpider/")
-    public String addSpiderPage(@PathVariable(name ="farmID") String farmId, Model model){
+    public String addSpiderPage(@PathVariable(name = "farmID") String farmId, Model model) {
 
         final Map<String, List<String>> genusSpeciesMap = createGenusSpeciesListMap();
 
@@ -111,20 +120,22 @@ public class SpiderController {
         Map<String, List<SpiderSpeciesInfoDTO>> genusSpeciesMap = spiderSpeciesInfoService.findAll().stream()
                 .collect(Collectors.groupingBy(SpiderSpeciesInfoDTO::getGenus));
         return genusSpeciesMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, i->i.getValue().stream().map(SpiderSpeciesInfoDTO::getSpecies).collect(Collectors.toList())));
+                .collect(Collectors.toMap(Map.Entry::getKey, i -> i.getValue().stream().map(SpiderSpeciesInfoDTO::getSpecies).collect(Collectors.toList())));
     }
 
-    private List<CareDTO> createFeedingList(Integer spiderId){
+    private List<CareDTO> createFeedingList(Integer spiderId) {
         return careService.findAllByAnimalId(spiderId).stream()
                 .filter(c -> c.getType().equals(CareType.FEEDING))
                 .collect(Collectors.toList());
     }
-    private List<CareDTO> createSubstrateChangeList(Integer spiderId){
+
+    private List<CareDTO> createSubstrateChangeList(Integer spiderId) {
         return careService.findAllByAnimalId(spiderId).stream()
                 .filter(c -> c.getType().equals(CareType.SUBSTRATE_CHANGE))
                 .collect(Collectors.toList());
     }
-    private List<CareDTO> createRehouseList(Integer spiderId){
+
+    private List<CareDTO> createRehouseList(Integer spiderId) {
         return careService.findAllByAnimalId(spiderId).stream()
                 .filter(c -> c.getType().equals(CareType.REHOUSE))
                 .collect(Collectors.toList());

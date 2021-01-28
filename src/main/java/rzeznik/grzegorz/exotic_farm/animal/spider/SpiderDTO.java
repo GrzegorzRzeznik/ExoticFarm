@@ -4,11 +4,12 @@ import lombok.Getter;
 import rzeznik.grzegorz.exotic_farm.animal.AnimalDTO;
 import rzeznik.grzegorz.exotic_farm.animal.Sex;
 import rzeznik.grzegorz.exotic_farm.animal.Temperament;
+import rzeznik.grzegorz.exotic_farm.animal.spider.molt.MoltDTO;
 import rzeznik.grzegorz.exotic_farm.animal.spider.speciesInfo.SpiderSpeciesInfoDTO;
-import rzeznik.grzegorz.exotic_farm.care.CareDTO;
 import rzeznik.grzegorz.exotic_farm.farm.FarmDTO;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,6 +18,7 @@ public class SpiderDTO extends AnimalDTO {
     private SpiderSpeciesInfoDTO infoDTO;
     private VenomPotency venomPotency;
     private Type type;
+    private List<MoltDTO> moltsDTOList = new ArrayList<>();
 
     public SpiderDTO(Integer id,
                      LocalDate acquisitionDate,
@@ -45,6 +47,12 @@ public class SpiderDTO extends AnimalDTO {
         super(acquisitionDate, name, farmDTO, sex, status, temperament);
         this.venomPotency = venomPotency;
         this.type = type;
+    }
+
+    public void addMolt(MoltDTO moltDTO){
+        if (moltsDTOList.contains(moltDTO))
+            return ;
+        moltsDTOList.add(moltDTO);
     }
 
     public void setInfoDTO(SpiderSpeciesInfoDTO infoDTO) {

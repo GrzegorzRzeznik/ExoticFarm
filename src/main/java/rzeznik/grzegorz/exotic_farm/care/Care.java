@@ -65,7 +65,8 @@ public class Care {
     }
 
     public static Care applyDTO(CareDTO careDTO){
-        return new Care(careDTO.getId(), User.applyDTO(careDTO.getUserDTO()),
+        return new Care(careDTO.getId(),
+                User.applyDTO(careDTO.getUserDTO()),
                 careDTO.getDate(),
                 careDTO.getType());
     }
